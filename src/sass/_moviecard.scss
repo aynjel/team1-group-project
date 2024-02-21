@@ -4,7 +4,7 @@
 }
 .movie-cards{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit,minmax(280px,0.4fr));
     align-items: center;
     justify-content: center;
     grid-gap: 2.5rem;
@@ -15,7 +15,7 @@
         border-radius: 5px;
         
         .card-img{
-            height: 400px;
+            height: 398px;
             width: 100%;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
