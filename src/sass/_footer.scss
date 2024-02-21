@@ -1,0 +1,32 @@
+:root{
+    --white:#f7f7f7;
+    --gray:#545454;
+    --orange: #FF6B08;
+}
+.footer-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--white);
+    font-size:18px;
+    padding: 15px;
+    text-align: center;
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+.footer-text{
+    display:flex;
+    align-items: center;
+    color: var(--gray);
+}
+.footer-icon{
+    
+    fill: var(--orange);
+    height: 18px;
+    width: 18px;
+}
+.footer-underline{
+    text-decoration: underline;
+}
