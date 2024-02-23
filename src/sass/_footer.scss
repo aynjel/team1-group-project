@@ -1,28 +1,46 @@
-:root{
-    --white:#f7f7f7;
-    --gray:#545454;
-    --orange: #FF6B08;
+:root {
+  --white: #f7f7f7;
+  --gray: #545454;
+  --orange: #ff6b08;
 }
 footer {
-    font-family: "Roboto", sans-serif;
-    background-color:var(--white);
-    color:var(--gray);
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.8rem;
-    position: relative;
-    right: 0;
-    left: 0;
-    bottom: 0;
-  }
-  
-  footer svg {
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-    fill:var(--orange);
-    margin-right: 0.2em;
-  }
-  .footer-underline{
-    text-decoration: underline;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--white);
+  color: var(--gray);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.8rem;
+  /* position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0; */
+}
+
+footer svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: var(--orange);
+  margin-right: 0.2em;
+}
+.footer-underline {
+  text-decoration: underline;
+  font-family: "Roboto", sans-serif;
+  background-color:var(--white);
+  color:var(--gray);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.8rem;
+  position: relative;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+footer svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill:var(--orange);
+  margin-right: 0.2em;
 }

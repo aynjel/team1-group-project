@@ -1,5 +1,5 @@
 import { IMAGE_URL } from './movies-api';
-import { getTrendingMovies, getMovieGenres } from './movieController';
+import { getTrendingMovies, getMovieGenres } from './movieController'
 import { getMovieDetails } from './movieModal';
 
 var movieList = document.querySelector('.movies-list');
@@ -60,4 +60,3 @@ movieList.addEventListener('click', event => {
 closeModal.addEventListener('click', () => {
   modal.classList.remove('open');
 });
-// MODAL FUNCTION END
