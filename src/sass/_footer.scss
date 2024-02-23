@@ -1,28 +1,38 @@
 :root{
-    --white:#f7f7f7;
-    --gray:#545454;
-    --orange: #FF6B08;
+  --white:#f7f7f7;
+  --gray:#545454;
+  --orange: #FF6B08;
 }
 footer {
-    font-family: "Roboto", sans-serif;
-    background-color:var(--white);
-    color:var(--gray);
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.8rem;
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 0;
+  margin:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color:var(--white);
+  color:var(--gray);
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+
+footer svg {
+  fill: var(--orange);
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.5rem;
+  vertical-align: middle;
+}
+
+@media (min-width: 48em) {
+  footer {
+    flex-direction: row;
   }
-  
+
+  footer p:first-child {
+    margin-right: 1rem;
+  }
+
   footer svg {
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-    fill:var(--orange);
-    margin-right: 0.2em;
+    margin-top: 0;
   }
-  .footer-underline{
-    text-decoration: underline;
 }
