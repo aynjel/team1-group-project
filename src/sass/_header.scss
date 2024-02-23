@@ -1,0 +1,166 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+:root {
+  --main-white: #ffffff;
+  --main-orange: #ff6b08;
+  --main-gray: #818181;
+}
+
+.nav-bar {
+  width: 100%;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  padding: 25px 50px;
+}
+
+#nav-bg {
+  background: url(../images/hero-bg-desktop.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.logo-container {
+  display: flex;
+  gap: 15px;
+}
+
+.logo {
+  width: 40px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: transparent url('../images/film.svg') no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.logo p,
+.logo-container > .logo-text {
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 35.16px;
+  color: var(--main-white);
+}
+
+.menu-links > ul {
+  display: flex;
+  justify-content: space-between;
+
+  > li {
+    padding: 5px 10px;
+    line-height: 14.06px;
+    list-style: none;
+
+    > a {
+      color: var(--main-white);
+      font-weight: 500;
+      font-size: 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-bottom 0.1s ease-in-out;
+
+      &:hover,
+      &.focus {
+        border-bottom: 3px solid var(--main-orange);
+      }
+    }
+  }
+}
+
+.form-control-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+  padding-bottom: 70px;
+  position: relative;
+}
+
+.search-form {
+  display: flex;
+  padding: 2px;
+  width: 336px;
+  border-bottom: 1px solid var(--main-white);
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  padding: 7px 8px;
+  font-size: 14px;
+  color: inherit;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  flex: 1;
+  color: var(--main-white);
+  opacity: 0.7;
+
+  &:focus {
+    border-color: transparent;
+    outline: none;
+    opacity: 1;
+  }
+}
+
+.search-button {
+  width: 40px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: transparent url('../images/search\ 2.svg') no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+//mobile screen
+@media screen and (max-width: 768px) {
+  #nav-bg {
+    background: url(../images/hero-bg-mobile.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .nav-bar {
+    width: 100%;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    padding: 25px 25px;
+  }
+
+  .logo {
+    color: var(--main-white);
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .search-form {
+    display: flex;
+    padding: 2px;
+    width: 100%;
+    margin: 0 25px;
+    border-bottom: 1px solid var(--main-white);
+  }
+}
