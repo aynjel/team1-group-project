@@ -1,45 +1,44 @@
-:root {
-  --white: #f7f7f7;
-  --gray: #545454;
-  --orange: #ff6b08;
+:root{
+  --white:#f7f7f7;
+  --gray:#545454;
+  --orange: #FF6B08;
 }
 footer {
-  font-family: 'Roboto', sans-serif;
-  background-color: var(--white);
-  color: var(--gray);
-  text-align: center;
-  padding: 2rem;
-  font-size: 0.8rem;
-  position: relative;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  margin:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color:var(--white);
+  color:var(--gray);
+  padding: 1rem;
+  font-size: 1rem;
+  gap:5px;
 }
 
 footer svg {
-  width: 1em;
-  height: 1em;
-  vertical-align: middle;
   fill: var(--orange);
-  margin-right: 0.2em;
-}
-.footer-underline {
-  text-decoration: underline;
-  font-family: "Roboto", sans-serif;
-  background-color:var(--white);
-  color:var(--gray);
-  text-align: center;
-  font-size: 0.8rem;
-  position: relative;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  width: 1.5rem;
+  height: 1rem;
+  vertical-align: middle;
+  margin-top:-0.2rem;
+
 }
 
-.footer-svg {
-  width: 1em;
-  height: 1em;
-  vertical-align: middle;
-  fill:var(--orange);
-  margin-right: 0.2em;
+@media (min-width: 48em) {
+  footer {
+    flex-direction: row;
+  }
+
+  footer p:first-child {
+    margin-right: .1rem;
+  }
+
+  footer svg {
+    margin-top: 0;
+    
+  }
+}
+.footer-underline{
+    text-decoration: underline;
 }
