@@ -10,10 +10,10 @@ footer {
   text-align: center;
   padding: 2rem;
   font-size: 0.8rem;
-  /* position: absolute;
+  position: relative;
   right: 0;
   left: 0;
-  bottom: 0; */
+  bottom: 0;
 }
 
 footer svg {
@@ -29,7 +29,6 @@ footer svg {
   background-color:var(--white);
   color:var(--gray);
   text-align: center;
-  padding: 2rem;
   font-size: 0.8rem;
   position: relative;
   right: 0;
@@ -37,7 +36,7 @@ footer svg {
   bottom: 0;
 }
 
-footer svg {
+.footer-svg {
   width: 1em;
   height: 1em;
   vertical-align: middle;
