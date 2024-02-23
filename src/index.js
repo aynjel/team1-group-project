@@ -1,5 +1,6 @@
 import { IMAGE_URL } from './movies-api';
-import { getTrendingMovies, getMovieGenres } from './movieController';
+import { getTrendingMovies, getMovieGenres } from './movieController'
+import { getMovieDetails } from './movieModal';
 
 var movieList = document.querySelector('.movies-list');
 var genreList = [];
@@ -20,7 +21,7 @@ getTrendingMovies('week').then(response => {
     });
 
     movies += `
-            <li class='movie-details'>
+            <li class='movie-details' data-movie-id="${movie.id}">
                 <img src="${IMAGE_URL}${movie.poster_path}" alt="${
       movie.title
     }" class="card-img" />
@@ -39,4 +40,23 @@ getTrendingMovies('week').then(response => {
         `;
   });
   movieList.innerHTML = movies;
+});
+
+// MODAL FUNCTION START
+const closeModal = document.querySelector('.modal-close-btn');
+
+const modal = document.getElementById('modal');
+movieList.addEventListener('click', event => {
+  const targetMovie = event.target.closest('.movie-details');
+  if (targetMovie) {
+    modal.classList.add('open');
+    console.log('click');
+    const movieId = targetMovie.getAttribute('data-movie-id');
+    console.log(movieId);
+    getMovieDetails(movieId);
+  }
+});
+
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('open');
 });
