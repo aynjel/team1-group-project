@@ -1,0 +1,46 @@
+:root{
+  --white:#f7f7f7;
+  --gray:#545454;
+  --orange: #FF6B08;
+}
+footer {
+  margin:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color:var(--white);
+  color:var(--gray);
+  padding: 2rem;
+  font-size: 1rem;
+  gap: 10px;
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+footer svg {
+  fill: var(--orange);
+  width: 1.5rem;
+  height: 1rem;
+  vertical-align: middle;
+
+}
+
+@media (min-width: 48em) {
+  footer {
+    flex-direction: row;
+  }
+
+  footer p:first-child {
+    margin-right: .1rem;
+  }
+
+  footer svg {
+    margin-top: 0;
+    
+  }
+}
+.footer-underline{
+    text-decoration: underline;
+}
