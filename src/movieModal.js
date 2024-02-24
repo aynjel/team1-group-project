@@ -1,12 +1,10 @@
-import { Get } from './movieService';
-import { IMAGE_URL } from './movies-api';
+import { GetMovieDetails } from './movieController';
+import { IMAGE_URL, DEFAULT_IMG } from './movies-api';
 
 export async function getMovieDetails(movieId) {
-  const response = await Get(`/movie/${movieId}`);
-  const data = response.data;
-  console.log(data);
+  const { data } = await GetMovieDetails(movieId);
   updateModal(data);
-  return data;
+  console.log(data);
 }
 
 const modalMovieImage = document.getElementById('modalImage');
@@ -36,7 +34,7 @@ function updateModal(data) {
   let popularityround = parseFloat(popularity).toFixed(1);
 
   modalMovieGenre.innerText = genres.map(genre => genre.name).join(', ');
-  modalMovieImage.src = `${IMAGE_URL}${poster_path}`;
+  modalMovieImage.src = poster_path ? `${IMAGE_URL}${poster_path}` : DEFAULT_IMG;
   modalMovieVoteAverage.innerHTML = `${averageround} `;
   modalMovieVote.innerText = `/ ${vote_count}`;
   modalMovieTitle.innerText = `${title}`;
