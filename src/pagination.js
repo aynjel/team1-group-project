@@ -1,14 +1,21 @@
-export const paginationContainer = document.querySelector('#pagination');
+import { IMAGE_URL, DEFAULT_IMG } from './movies-api';
+import {
+  GetMovieGenres,
+  GetMoviesByQuery,
+  GetTrendingMovies,
+  GetMovieDetails,
+} from './movieController';
+import { getMovieDetails } from './movieModal';
+import { MovieCardHTML, moviesQueryType, currentMovieQuery } from './index';
 
 // ###############################################################
 // Variable Declarations and Assignments
 // ###############################################################
 const movieList = document.querySelector('#movies-list');
-
+export const paginationContainer = document.querySelector('#pagination');
 export let gSelectedPage = 1;
 let gItemsPerPage = 20;
 const paginateChoices = 5; // pages to show before cutting
-let testItems = Array.from(movieList.getElementsByTagName('li'));
 
 //
 //
@@ -16,9 +23,11 @@ let testItems = Array.from(movieList.getElementsByTagName('li'));
 // Functions
 // ###############################################################
 
-export function refreshPagination(data, pagination, pageSelected) {
+export function refreshPagination(totalPages, pagination, pageSelected) {
+  // console.log(`selected page: `, pageSelected);
+  gTotalPages = totalPages;
+  // console.log(`gTotalPages is: `, gTotalPages);
   let pagesToDisplay = [];
-  const totalPages = Math.ceil(data.length / gItemsPerPage);
   const paginateGroup = Math.ceil(pageSelected / paginateChoices);
   let pageDots = 1;
 
@@ -117,20 +126,52 @@ function clickedPage(event) {
     gSelectedPage = (event.currentTarget.dataset.group - 1) * 5 + 1;
   }
 
-  // RENDER movie cards
-}
-
-function showResults(data, resultContainer, gItemsPerPage, pageSelected) {
-  resultContainer.innerHTML = '';
-
-  const dataToShow = data.slice(
-    (pageSelected - 1) * gItemsPerPage,
-    (pageSelected - 1) * gItemsPerPage + gItemsPerPage
-  );
-
-  for (let i = 0; i < dataToShow.length; i++) {
-    resultContainer.appendChild(dataToShow[i]);
+  if (moviesQueryType == 'byTrending') {
+    fetchTrending();
+  }
+  if (moviesQueryType == 'byQuery') {
+    fetchByQuery();
   }
 
-  refreshPagination(testItems, paginationContainer, gSelectedPage);
+  refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
+}
+
+function fetchTrending() {
+  GetTrendingMovies('week', gSelectedPage).then(response => {
+    // console.log(`from byTrending`, `page: `, gSelectedPage);
+    var movies = '';
+    response.data.results.forEach(movie => {
+      movies += MovieCardHTML(movie);
+    });
+
+    movieList.innerHTML = movies;
+
+    refreshPagination(
+      response.data.total_pages,
+      paginationContainer,
+      gSelectedPage
+    );
+  });
+}
+
+function fetchByQuery() {
+  // console.log(`from byQuery`, currentMovieQuery, `page: `, gSelectedPage);
+  GetMoviesByQuery(currentMovieQuery, gSelectedPage).then(response => {
+    if (response.data.results.length === 0) {
+      displayError('No movie found');
+      return;
+    }
+
+    var movies = '';
+    response.data.results.forEach(movie => {
+      movies += MovieCardHTML(movie);
+    });
+
+    movieList.innerHTML = movies;
+    refreshPagination(
+      response.data.total_pages,
+      paginationContainer,
+      gSelectedPage
+    );
+  });
 }
