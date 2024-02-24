@@ -1,26 +1,45 @@
 <header id="nav-bg">
   <nav class="nav-bar">
-    <div class="logo-container">
-      <div class="logo"></div>
-      <div class="logo-text">Filmoteka</div>
-    </div>
-    <div class="menu-links">
-      <ul>
-        <li><a class="active" href="">Home</a></li>
-        <li><a href="">My Library</a></li>
-      </ul>
+    <div class="tab-form">
+      <div class="tab-header">
+        <div class="logo-container">
+          <a class="logo" href="index.html">
+            <!-- <svg class="film" width="12" height="12">
+                          <use xlink:href="./images/icons.svg#film-icon"></use>
+                      </svg> -->
+            <span class="logo-text">Filmoteka</span>
+          </a>
+        </div>
+        <div class="tab-links active">Home</div>
+        <div class="tab-links">My Library</div>
+      </div>
+      <div class="tab-content">
+        <div class="form-search content active">
+          <div class="form-control-container">
+            <form class="search-form" id="search-form">
+              <div class="form-input">
+                <input
+                  type="text"
+                  name="searchQuery"
+                  id="searchQuery"
+                  class="search-input"
+                  autocomplete="off"
+                  placeholder="Search..."
+                />
+              </div>
+              <button type="submit" class="search-button">
+                <svg class="search-logo" width="12" height="12">
+                  <use xlink:href="./images/icons.svg#search2"></use>
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="library content">
+          <button class="btn watch active">Watched</button>
+          <button class="btn queue">Queue</button>
+        </div>
+      </div>
     </div>
   </nav>
-  <div class="form-control-container">
-    <form class="search-form" action="">
-      <input
-        type="search"
-        class="search-input"
-        name="searchQuery"
-        id="searchQuery"
-        placeholder="Search..."
-      />
-      <button type="submit" class="search-button"></button>
-    </form>
-  </div>
 </header>
