@@ -1,4 +1,4 @@
-import { IMAGE_URL, DEFAULT_IMG } from './movies-api';
+import { IMAGE_URL } from './movies-api';
 import {
   GetMovieGenres,
   GetMoviesByQuery,
@@ -10,16 +10,6 @@ import {
   paginationContainer,
   gSelectedPage,
 } from './pagination';
-import { getMovieDetails } from './movieModal';
-
-export let moviesQueryType = 'byTrending';
-// for pagination to know which query to do
-// moviesQueryType possible values : [byTrending, byQuery, byLibraryWatched, byLibraryQueue]
-
-export let currentMovieQuery = '';
-// for pagination to query text in search bar
-
-const initialPage = 1;
 
 var movieList = document.querySelector('.movies-list');
 var genreList = [];
@@ -57,7 +47,9 @@ searchForm.addEventListener('submit', event => {
   console.log('searching');
   var query = searchQuery.value.trim();
   if (query === '') {
-    displayError('Search result not successful. Enter the correct movie name and');
+    displayError(
+      'Search result not successful. Enter the correct movie name and'
+    );
     return;
   }
 
@@ -66,7 +58,9 @@ searchForm.addEventListener('submit', event => {
   GetMoviesByQuery(query, initialPage).then(response => {
     moviesQueryType = 'byQuery';
     if (response.data.results.length === 0) {
-      displayError('Search result not successful. Enter the correct movie name and');
+      displayError(
+        'Search result not successful. Enter the correct movie name and'
+      );
       return;
     }
 
@@ -122,34 +116,33 @@ function displayError(message) {
   errorMessageElement.classList.add('error-message');
 }
 
-export function MovieCardHTML(movie) {
-  var genreNames = [];
-  movie.genre_ids.forEach(genreId => {
-    var genre = genreList.find(genre => genre.id === genreId);
-    genreNames.push(genre.name);
-  });
-
-  var movie_image = movie.poster_path
-    ? `${IMAGE_URL}${movie.poster_path}`
-    : DEFAULT_IMG;
-
-  if (genreNames.length === 0) {
-    genreNames.push('No genre');
+// MODAL FUNCTION START #####################################
+const closeModal = document.querySelector('.modal-close-btn');
+const modal = document.getElementById('modal');
+movieList.addEventListener('click', event => {
+  const targetMovie = event.target.closest('.movie-details');
+  if (targetMovie) {
+    modal.classList.add('open');
+    console.log('click');
+    const movieId = targetMovie.getAttribute('data-movie-id');
+    console.log(movieId);
+    getMovieDetails(movieId);
   }
+});
 
-  return `
-    <li class='movie-details' data-movie-id="${movie.id}">
-      <img src="${movie_image}" alt="${movie.title}" class="card-img" />
-      <div class="movie-info">
-        <h3 class="movie-title">${movie.title}</h3>
-        <span class="movie-meta">
-          <span class="movie-genre">${genreNames.join(', ')}</span>
-          |
-          <span class="movie-release-date">${new Date(
-            movie.release_date
-          ).getFullYear()}</span>
-        </span>
-      </div>
-    </li>
-  `;
-}
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('open');
+});
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') {
+    modal.classList.remove('open');
+  }
+});
+
+modal.addEventListener('click', function (event) {
+  if (!event.target.closest('.moviecard-modal-content')) {
+    modal.classList.remove('open');
+  }
+});
+// MODAL FUNCTION END #####################################
