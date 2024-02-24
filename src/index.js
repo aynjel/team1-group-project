@@ -107,6 +107,8 @@ function displayError(message) {
   errorMessageElement.textContent = message;
   errorMessageElement.style.color = 'red';
   errorMessageElement.style.display = 'block';
+  errorMessageElement.style.textAlign = 'center';
+  errorMessageElement.style.paddingTop = '22px';
 
   // Clear previous error messages if any
   var existingErrorMessage = document.querySelector('.error-message');

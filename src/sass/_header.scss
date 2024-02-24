@@ -24,8 +24,8 @@
   background: url(../images/hero-bg-desktop.jpg);
   background-repeat: no-repeat;
   background-size: cover;
-  height: 230px;
-
+  height: 240px;
+  opacity: .90;
 }
 
 .logo-container {
@@ -74,7 +74,7 @@
 .search-form {
   display: flex;
   padding: 2px;
-  width: 600px;
+  width: 336px;
   border-bottom: 1px solid var(--main-white);
 }
 
@@ -178,7 +178,6 @@
     border-bottom: 1px solid var(--main-white);
   }
 }
-
 
 .tab-form {
   position: relative;
