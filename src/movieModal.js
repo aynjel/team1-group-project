@@ -18,6 +18,7 @@ const modalMovieOriginalTitle = document.getElementById(
 );
 const modalMovieGenre = document.getElementById('modalMovieGenre');
 const modalMovieAbout = document.getElementById('modalMovieAbout');
+const modalMovieVoteAverage = document.getElementById('modalMovieVoteAverage');
 
 function updateModal(data) {
   const {
@@ -31,11 +32,15 @@ function updateModal(data) {
     popularity,
   } = data;
 
+  let averageround = parseFloat(vote_average).toFixed(1);
+  let popularityround = parseFloat(popularity).toFixed(1);
+
   modalMovieGenre.innerText = genres.map(genre => genre.name).join(', ');
   modalMovieImage.src = `${IMAGE_URL}${poster_path}`;
-  modalMovieVote.innerText = `${vote_average} / ${vote_count}`;
+  modalMovieVoteAverage.innerHTML = `${averageround} `;
+  modalMovieVote.innerText = `/ ${vote_count}`;
   modalMovieTitle.innerText = `${title}`;
-  modalMoviePopularity.innerText = `${popularity}`;
+  modalMoviePopularity.innerText = `${popularityround}`;
   modalMovieOriginalTitle.innerText = `${original_title}`;
   modalMovieAbout.innerText = `${overview}`;
 }
