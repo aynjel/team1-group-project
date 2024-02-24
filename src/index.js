@@ -11,7 +11,13 @@ import {
   gSelectedPage,
 } from './pagination';
 import { getMovieDetails } from './movieModal';
-
+import {
+  RegisterUser,
+  SignInUser,
+  addToWatch,
+  addToQueue,
+  updateUserInfoFromFirebase,
+} from './userInteraction';
 export let moviesQueryType = 'byTrending';
 // for pagination to know which query to do
 // moviesQueryType possible values : [byTrending, byQuery, byLibraryWatched, byLibraryQueue]
@@ -57,7 +63,9 @@ searchForm.addEventListener('submit', event => {
   console.log('searching');
   var query = searchQuery.value.trim();
   if (query === '') {
-    displayError('Search result not successful. Enter the correct movie name and');
+    displayError(
+      'Search result not successful. Enter the correct movie name and'
+    );
     return;
   }
 
@@ -66,7 +74,9 @@ searchForm.addEventListener('submit', event => {
   GetMoviesByQuery(query, initialPage).then(response => {
     moviesQueryType = 'byQuery';
     if (response.data.results.length === 0) {
-      displayError('Search result not successful. Enter the correct movie name and');
+      displayError(
+        'Search result not successful. Enter the correct movie name and'
+      );
       return;
     }
 
@@ -82,23 +92,6 @@ searchForm.addEventListener('submit', event => {
       initialPage
     );
   });
-});
-
-// MODAL FUNCTION START
-const closeModal = document.querySelector('.modal-close-btn');
-
-const modal = document.getElementById('modal');
-movieList.addEventListener('click', event => {
-  const targetMovie = event.target.closest('.movie-details');
-  if (targetMovie) {
-    modal.classList.add('open');
-    const movieId = targetMovie.getAttribute('data-movie-id');
-    getMovieDetails(movieId);
-  }
-});
-
-closeModal.addEventListener('click', () => {
-  modal.classList.remove('open');
 });
 
 function displayError(message) {
@@ -153,3 +146,89 @@ export function MovieCardHTML(movie) {
     </li>
   `;
 }
+
+// MODAL FUNCTION START #####################################
+const closeModal = document.querySelector('.modal-close-btn');
+const modal = document.getElementById('modal');
+const addToWatchedBtn = document.getElementById('addToWatchedBtn');
+const addToQueueBtn = document.getElementById('addToQueueBtn');
+movieList.addEventListener('click', event => {
+  const targetMovie = event.target.closest('.movie-details');
+  if (targetMovie) {
+    modal.classList.add('open');
+    console.log('click');
+    const movieId = targetMovie.getAttribute('data-movie-id');
+    console.log(movieId);
+    getMovieDetails(movieId);
+    addToWatchedBtn.setAttribute('data-movie-id', movieId);
+    addToQueueBtn.setAttribute('data-movie-id', movieId);
+  }
+});
+
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('open');
+});
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') {
+    modal.classList.remove('open');
+  }
+});
+
+modal.addEventListener('click', function (event) {
+  if (!event.target.closest('.moviecard-modal-content')) {
+    modal.classList.remove('open');
+  }
+});
+// MODAL FUNCTION END #####################################
+
+// FIREBASE LOGIN AND USERINERACTION  START ###############
+let inputEmailRegister = document.getElementById('inputEmailRegister');
+let inputPasswordRegister = document.getElementById('inputPasswordRegister');
+let inputFirstName = document.getElementById('inputFirstName');
+let inputLastName = document.getElementById('inputLastName');
+
+let RegistrationForm = document.getElementById('RegistrationForm');
+// let loginModal = document.getElementById('loginModal');
+let SignInForm = document.getElementById('SignInForm');
+
+RegistrationForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  RegisterUser(
+    inputEmailRegister.value,
+    inputPasswordRegister.value,
+    inputFirstName.value,
+    inputLastName.value
+  )
+    .then(() => {
+      console.log('Registration successful');
+
+      evt.target.reset();
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+});
+
+SignInForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  SignInUser(inputEmailSignIn.value, inputPasswordSignIn.value)
+    .then(() => {
+      console.log('Sign-in successful');
+      evt.target.reset();
+      loginModal.classList.add('login-close');
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+});
+
+addToWatchedBtn.addEventListener('click', addToWatch);
+addToQueueBtn.addEventListener('click', addToQueue);
+
+// window.addEventListener('beforeunload', function () {
+//   sessionStorage.clear();
+//   localStorage.clear();
+// });
