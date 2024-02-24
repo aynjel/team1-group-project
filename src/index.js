@@ -1,7 +1,25 @@
 import { IMAGE_URL, DEFAULT_IMG } from './movies-api';
-import { GetMovieGenres, GetMoviesByQuery, GetTrendingMovies, GetMovieDetails } from './movieController';
-import { refreshPagination, paginationContainer, gSelectedPage,} from './pagination';
+import {
+  GetMovieGenres,
+  GetMoviesByQuery,
+  GetTrendingMovies,
+  GetMovieDetails,
+} from './movieController';
+import {
+  refreshPagination,
+  paginationContainer,
+  gSelectedPage,
+} from './pagination';
 import { getMovieDetails } from './movieModal';
+
+export let moviesQueryType = 'byTrending';
+// for pagination to know which query to do
+// moviesQueryType possible values : [byTrending, byQuery, byLibraryWatched, byLibraryQueue]
+
+export let currentMovieQuery = '';
+// for pagination to query text in search bar
+
+const initialPage = 1;
 
 var movieList = document.querySelector('.movies-list');
 var genreList = [];
@@ -11,16 +29,20 @@ var queue = []; // for queue movies
 
 GetMovieGenres().then(response => genreList.push(...response.data.genres));
 
-GetTrendingMovies('week', gSelectedPage).then(response => {
+GetTrendingMovies('week', initialPage).then(response => {
+  moviesQueryType = 'byTrending';
   var movies = '';
   response.data.results.forEach(movie => {
     movies += MovieCardHTML(movie);
   });
 
   movieList.innerHTML = movies;
-  refreshPagination(response.data.total_pages, paginationContainer);
+  refreshPagination(
+    response.data.total_pages,
+    paginationContainer,
+    initialPage
+  );
 });
-
 
 GetMovieDetails(365620).then(response => {
   // console.log(response.data);
@@ -39,7 +61,10 @@ searchForm.addEventListener('submit', event => {
     return;
   }
 
-  GetMoviesByQuery(query, gSelectedPage).then(response => {
+  currentMovieQuery = query;
+
+  GetMoviesByQuery(query, initialPage).then(response => {
+    moviesQueryType = 'byQuery';
     if (response.data.results.length === 0) {
       displayError('No movie found');
       return;
@@ -51,7 +76,11 @@ searchForm.addEventListener('submit', event => {
     });
 
     movieList.innerHTML = movies;
-    refreshPagination(response.data.total_pages, paginationContainer);
+    refreshPagination(
+      response.data.total_pages,
+      paginationContainer,
+      initialPage
+    );
   });
 });
 
@@ -91,7 +120,7 @@ function displayError(message) {
   errorMessageElement.classList.add('error-message');
 }
 
-function MovieCardHTML(movie) {
+export function MovieCardHTML(movie) {
   var genreNames = [];
   movie.genre_ids.forEach(genreId => {
     var genre = genreList.find(genre => genre.id === genreId);
@@ -114,7 +143,9 @@ function MovieCardHTML(movie) {
         <span class="movie-meta">
           <span class="movie-genre">${genreNames.join(', ')}</span>
           |
-          <span class="movie-release-date">${new Date(movie.release_date).getFullYear()}</span>
+          <span class="movie-release-date">${new Date(
+            movie.release_date
+          ).getFullYear()}</span>
         </span>
       </div>
     </li>
