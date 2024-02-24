@@ -17,9 +17,8 @@ footer {
 }
 
 footer svg {
-  margin-top: -3px;
   fill: var(--orange);
-  width: 1.9rem;
+  width: 1.5rem;
   height: 1rem;
   vertical-align: middle;
 
@@ -31,7 +30,12 @@ footer svg {
   }
 
   footer p:first-child {
-    margin-right: .2rem;
+    margin-right: .1rem;
+  }
+
+  footer svg {
+    margin-top: 0;
+    
   }
 }
 .footer-underline{
