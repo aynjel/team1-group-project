@@ -30,16 +30,21 @@ var searchForm = document.querySelector('.search-form');
 var searchQuery = document.querySelector('#searchQuery');
 var errorMessage = document.querySelector('.error-message');
 
-async function handleSubmit(event) {
+searchForm.addEventListener('submit', event => {
   event.preventDefault();
-  var query = searchQuery.value;
+  console.log('searching');
+  var query = searchQuery.value.trim();
   if (query === '') {
-    displayError('Please enter a valid search query');
+    displayError('Please enter a movie name');
     return;
   }
 
-  try {
-    var response = await GetMoviesByQuery(query, gSelectedPage);
+  GetMoviesByQuery(query, gSelectedPage).then(response => {
+    if (response.data.results.length === 0) {
+      displayError('No movie found');
+      return;
+    }
+
     var movies = '';
     response.data.results.forEach(movie => {
       movies += MovieCardHTML(movie);
@@ -47,12 +52,8 @@ async function handleSubmit(event) {
 
     movieList.innerHTML = movies;
     refreshPagination(response.data.total_pages, paginationContainer);
-  } catch (error) {
-    displayError('An error occurred while fetching movies');
-  }
-}
-
-searchForm.addEventListener('submit', handleSubmit);
+  });
+});
 
 // MODAL FUNCTION START
 const closeModal = document.querySelector('.modal-close-btn');
