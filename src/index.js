@@ -1,5 +1,9 @@
 import { IMAGE_URL } from './movies-api';
-import { getTrendingMovies, getMovieGenres, getSearchByQuery } from './movieController';
+import {
+  getTrendingMovies,
+  getMovieGenres,
+  getSearchByQuery,
+} from './movieController';
 import { getMovieDetails } from './movieModal';
 import {
   refreshPagination,
@@ -54,7 +58,7 @@ var searchForm = document.querySelector('.search-form');
 var searchQuery = document.querySelector('#searchQuery');
 var errorMessage = document.querySelector('.error-message');
 
-searchForm.addEventListener('submit', async function(event) {
+searchForm.addEventListener('submit', async function (event) {
   event.preventDefault(); // Prevent default form submission behavior
 
   var query = searchQuery.value;
@@ -68,7 +72,9 @@ searchForm.addEventListener('submit', async function(event) {
 
     if (dataResult.length === 0) {
       // If no results found, display an error message
-      displayError('Search result not successful. Enter the correct movie name and');
+      displayError(
+        'Search result not successful. Enter the correct movie name and'
+      );
       return; // Exit the function early
     }
 
@@ -81,12 +87,16 @@ searchForm.addEventListener('submit', async function(event) {
 
       movies += `
         <li class='movie-details' data-movie-id="${movie.id}">
-          <img src="${IMAGE_URL}${movie.poster_path}" alt="${movie.title}" class="card-img" />
+          <img src="${IMAGE_URL}${movie.poster_path}" alt="${
+        movie.title
+      }" class="card-img" />
           <div class="movie-info">
             <h3 class="movie-title">${movie.title}</h3>
             <span class="movie-meta">
               <span class="movie-genre">${genreNames.join(', ')}</span> |
-              <span class="movie-release-date">${new Date(movie.release_date).getFullYear()}</span>
+              <span class="movie-release-date">${new Date(
+                movie.release_date
+              ).getFullYear()}</span>
             </span>
           </div>
         </li>
@@ -98,7 +108,9 @@ searchForm.addEventListener('submit', async function(event) {
   } catch (error) {
     console.error('Error:', error.message);
     // Handle errors (e.g., display error message to the user)
-    displayError('Search result not successful. Enter the correct movie name and try again.');
+    displayError(
+      'Search result not successful. Enter the correct movie name and try again.'
+    );
   }
 });
 
@@ -108,22 +120,21 @@ function displayError(message) {
   errorMessageElement.textContent = message;
   errorMessageElement.style.color = 'red';
   errorMessageElement.style.display = 'block';
-  
+
   // Clear previous error messages if any
   var existingErrorMessage = document.querySelector('.error-message');
   if (existingErrorMessage) {
     existingErrorMessage.remove();
   }
-  
+
   // Append new error message
   var formContainer = document.querySelector('.form-control-container');
   formContainer.appendChild(errorMessageElement);
   errorMessageElement.classList.add('error-message');
 }
 
-// MODAL FUNCTION START
+// MODAL FUNCTION START #####################################
 const closeModal = document.querySelector('.modal-close-btn');
-
 const modal = document.getElementById('modal');
 movieList.addEventListener('click', event => {
   const targetMovie = event.target.closest('.movie-details');
@@ -139,3 +150,16 @@ movieList.addEventListener('click', event => {
 closeModal.addEventListener('click', () => {
   modal.classList.remove('open');
 });
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') {
+    modal.classList.remove('open');
+  }
+});
+
+modal.addEventListener('click', function (event) {
+  if (!event.target.closest('.moviecard-modal-content')) {
+    modal.classList.remove('open');
+  }
+});
+// MODAL FUNCTION END #####################################
