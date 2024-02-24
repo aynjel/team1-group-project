@@ -1,16 +1,17 @@
-import { Get, GetSearchByQuery } from './movieService';
+import { axiosInstance } from './movieService';
 
-export async function getTrendingMovies(time_window) {
-  const response = await Get(`/trending/movie/${time_window}`);
-  return response;
+export function GetTrendingMovies(time_window, page) {
+  return axiosInstance.get(`/trending/movie/${time_window}?page=${page}`);
 }
 
-export async function getMovieGenres() {
-  const response = await Get('/genre/movie/list');
-  return response;
+export function GetMovieGenres() {
+  return axiosInstance.get('/genre/movie/list');
 }
 
-export async function getSearchByQuery(query, page) {
-  const response = await GetSearchByQuery(query, page);
-  return response;
+export function GetMoviesByQuery(query, page) {
+  return axiosInstance.get(`/search/movie?query=${query}&page=${page}`);
+}
+
+export function GetMovieDetails(movieId) {
+  return axiosInstance.get(`/movie/${movieId}`);
 }
