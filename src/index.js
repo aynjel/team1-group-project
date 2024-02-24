@@ -41,7 +41,7 @@ searchForm.addEventListener('submit', event => {
 
   GetMoviesByQuery(query, gSelectedPage).then(response => {
     if (response.data.results.length === 0) {
-      displayError('No movie found');
+      displayError('Search result not successful. Enter the correct movie name and');
       return;
     }
 
@@ -120,3 +120,4 @@ function MovieCardHTML(movie) {
     </li>
   `;
 }
+
