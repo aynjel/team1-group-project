@@ -157,7 +157,6 @@ function fetchTrending() {
 function fetchByQuery() {
   // console.log(`from byQuery`, currentMovieQuery, `page: `, gSelectedPage);
   GetMoviesByQuery(currentMovieQuery, gSelectedPage).then(response => {
-    moviesQueryType = 'byQuery';
     if (response.data.results.length === 0) {
       displayError('No movie found');
       return;
