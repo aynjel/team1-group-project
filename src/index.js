@@ -35,7 +35,7 @@ searchForm.addEventListener('submit', event => {
   console.log('searching');
   var query = searchQuery.value.trim();
   if (query === '') {
-    displayError('Please enter a movie name');
+    displayError('Search result not successful. Enter the correct movie name and');
     return;
   }
 
