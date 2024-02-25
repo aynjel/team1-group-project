@@ -61,7 +61,7 @@ async function fetchInitialData() {
   }
   catch (error) {
     console.error('Error fetching initial data:', error);
-    displayError('Error fetching initial data. Please try again later.');
+    displayError('Search result not successful. Enter the correct movie name and');
   }
   finally {
     // setTimeout(() => {
@@ -86,7 +86,7 @@ function renderMovies(movies, queryType) {
 
 function handleSearchQuery(query) {
   if (query === '') {
-    displayError('Search result not successful. Enter the correct movie name');
+    displayError('Search result not successful. Enter the correct movie name and');
     return;
   }
 
@@ -97,7 +97,7 @@ function handleSearchQuery(query) {
     })
     .catch(error => {
       console.error('Error fetching movies by query:', error);
-      displayError('Error fetching movies. Please try again later.');
+      displayError('Search result not successful. Enter the correct movie name and.');
     });
 
   // Clear previous error messages if any
