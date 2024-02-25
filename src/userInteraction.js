@@ -10,6 +10,13 @@ import {
   get,
 } from './firebase.js';
 
+var authModal = document.getElementById('loginModal');
+var loginModal = document.getElementById('SignInForm');
+var registerModal = document.getElementById('RegistrationForm');
+
+var tabAuth = document.getElementById('tab-auth');
+var tabLibrary = document.getElementById('tab-library');
+
 const RegisterUser = (
   inputEmail,
   inputPassword,
@@ -20,6 +27,8 @@ const RegisterUser = (
     .then(credentials => {
       console.log(credentials);
       Notiflix.Notify.success('Registration Sucessfull');
+      loginModal.style.display = 'flex';
+      registerModal.style.display = 'none';
       return set(ref(db, 'UserAuthList/' + credentials.user.uid), {
         userId: credentials.user.uid,
         firstname: inputFirstName,
@@ -37,6 +46,9 @@ const SignInUser = (inputEmail, inputPassword) => {
       const userId = credentials.user.uid;
       const userRef = ref(db, 'UserAuthList/' + userId);
       Notiflix.Notify.success('You’ve successfully logged in');
+      authModal.style.display = 'none';
+      tabAuth.style.display = 'none';
+      tabLibrary.style.display = 'block';
       return get(userRef).then(snapshot => {
         if (snapshot.exists()) {
           const userData = {
@@ -137,33 +149,28 @@ const addToQueue = () => {
 };
 
 const updateUserInfoFromFirebase = async () => {
-  try {
-    const user = auth.currentUser;
+  const user = auth.currentUser;
+  if (!user) {
+    console.error('User not authenticated');
+    return Promise.reject('User not authenticated');
+  }
 
-    if (!user) {
-      console.error('User not authenticated');
-      return;
-    }
+  const userId = user.uid;
+  const userRef = ref(db, 'UserAuthList/' + userId);
 
-    const userId = user.uid;
-    const userRef = ref(db, 'UserAuthList/' + userId);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    const userData = {
+      MovieIDToWatched: snapshot.val().MovieIDToWatched,
+      MovieIDToQueue: snapshot.val().MovieIDToQueue,
+    };
 
-    const snapshot = await get(userRef);
+    console.log('User Data:', userData);
 
-    if (snapshot.exists()) {
-      const userData = {
-        MovieIDToWatched: snapshot.val().MovieIDToWatched || [],
-        MovieIDToQueue: snapshot.val().MovieIDToQueue || [],
-      };
-
-      sessionStorage.setItem('user-info', JSON.stringify(userData));
-
-      console.log('Updated User Info:', userData);
-    }
-  } catch (error) {
-    console.error('Error updating user-info:', error);
+    sessionStorage.setItem('user-info', JSON.stringify(userData));
   }
 };
+
 export {
   RegisterUser,
   SignInUser,

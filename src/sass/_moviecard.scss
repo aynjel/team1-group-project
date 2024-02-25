@@ -3,6 +3,15 @@
   margin: 40px auto;
   padding: 0 20px;
 }
+
+.movie-section-title{
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 .movies-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 0.4fr));
