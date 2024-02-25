@@ -24,19 +24,22 @@ const paginateChoices = 5; // pages to show before cutting
 // ###############################################################
 
 export function refreshPagination(totalPages, pagination, pageSelected) {
-  // console.log(`selected page: `, pageSelected);
-  gTotalPages = totalPages;
-  // console.log(`gTotalPages is: `, gTotalPages);
+  if (totalPages > 500) {
+    gTotalPages = 500;
+  } else {
+    gTotalPages = totalPages;
+  }
+
   let pagesToDisplay = [];
   const paginateGroup = Math.ceil(pageSelected / paginateChoices);
   let pageDots = 1;
 
-  choosePagesToDisplay(pagesToDisplay, totalPages, pageSelected);
+  choosePagesToDisplay(pagesToDisplay, gTotalPages, pageSelected);
 
   if (pageSelected != 1) {
     pagesToDisplay.unshift(`<`);
   }
-  if (pageSelected != totalPages) {
+  if (pageSelected != gTotalPages) {
     pagesToDisplay.push(`>`);
   }
 
@@ -71,7 +74,7 @@ export function refreshPagination(totalPages, pagination, pageSelected) {
 
     if (
       !(page == '<' && pageSelected == 1) &&
-      !(page == '>' && pageSelected == totalPages)
+      !(page == '>' && pageSelected == gTotalPages)
     ) {
       linkElement.addEventListener('click', clickedPage);
     }
@@ -132,13 +135,18 @@ function clickedPage(event) {
   if (moviesQueryType == 'byQuery') {
     fetchByQuery();
   }
+  if (moviesQueryType == 'byLibraryWatched') {
+    fetchByWatched();
+  }
+  if (moviesQueryType == 'byLibraryQueue') {
+    fetchByQueue();
+  }
 
   refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
 }
 
 function fetchTrending() {
   GetTrendingMovies('week', gSelectedPage).then(response => {
-    // console.log(`from byTrending`, `page: `, gSelectedPage);
     var movies = '';
     response.data.results.forEach(movie => {
       movies += MovieCardHTML(movie);
@@ -146,11 +154,7 @@ function fetchTrending() {
 
     movieList.innerHTML = movies;
 
-    refreshPagination(
-      response.data.total_pages,
-      paginationContainer,
-      gSelectedPage
-    );
+    refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
   });
 }
 
@@ -168,10 +172,18 @@ function fetchByQuery() {
     });
 
     movieList.innerHTML = movies;
-    refreshPagination(
-      response.data.total_pages,
-      paginationContainer,
-      gSelectedPage
-    );
+    refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
   });
+}
+
+function fetchByWatched() {
+  // Query for watched movies
+
+  refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
+}
+
+function fetchByQueue() {
+  // Query for queued movies
+
+  refreshPagination(gTotalPages, paginationContainer, gSelectedPage);
 }
