@@ -146,24 +146,6 @@
     }
 }
 
-.movicard-modal-button {
-    width: 112px;
-    height: 44px;
-    padding: 0;
-    margin: 0;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    background-color: white;
-
-    @media screen and(min-width:768px) {
-        width: 125px;
-    }
-
-    @media screen and(min-width:1280px) {}
-}
-
-
 .movie-details {
     cursor: pointer;
 }
@@ -185,4 +167,64 @@ tbody td {
 
 tbody td:nth-child(1) {
     width: 100px;
+}
+
+.movicard-modal-button-watched {
+    width: 122.58px;
+    height: 44px;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 15px 5px 15px;
+    background-color: #ff6b08;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+   
+
+    @media screen and(min-width:768px) {
+        width: 125px;
+        }
+    
+    @media screen and(min-width:1280px) {
+        width: 136px;
+    }
+}
+
+.movicard-modal-button-queue {
+    width: 122.58px;
+    height: 44px;
+    border-radius: 5px;
+    border: 1px solid;
+    padding: 5px 15px 5px 15px;
+    background-color: white;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+
+
+    @media screen and(min-width:768px) {
+        width: 125px;
+    }
+
+    @media screen and(min-width:1280px) {
+        width: 136px;
+    }
+}
+
+.modalMovieTitle {
+    font-size: 28px;
+}
+
+.modalMovieVoteAverage,
+.modalMovieVote,
+.modalMoviePopularity,
+.modalMovieOriginalTitle,
+.modalMovieGenre,
+.aboutHeader,
+.modalMovieAbout {
+    font-weight: bold;
 }
