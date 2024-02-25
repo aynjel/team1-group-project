@@ -1,4 +1,5 @@
 import Notiflix from 'notiflix';
+Notiflix.Notify.init({ position: 'center-top' });
 import {
   auth,
   db,
@@ -57,14 +58,12 @@ const SignInUser = (inputEmail, inputPassword) => {
           };
 
           console.log('User Data:', userData);
-
           sessionStorage.setItem('user-info', JSON.stringify(userData));
+          sessionStorage.setItem(
+            'user-credentials',
+            JSON.stringify(credentials.user)
+          );
         }
-
-        sessionStorage.setItem(
-          'user-credentials',
-          JSON.stringify(credentials.user)
-        );
       });
     })
     .catch(error => {
@@ -74,8 +73,14 @@ const SignInUser = (inputEmail, inputPassword) => {
 
 const addToWatch = () => {
   const movieId = addToWatchedBtn.dataset.movieId;
-  const user = auth.currentUser;
+  const userCredentials = sessionStorage.getItem('user-credentials');
 
+  if (!userCredentials) {
+    console.error('User not authenticated');
+    return Promise.reject('User not authenticated');
+  }
+
+  const user = auth.currentUser;
   if (!user) {
     console.error('User not authenticated');
     return Promise.reject('User not authenticated');
@@ -114,6 +119,12 @@ const addToWatch = () => {
 
 const addToQueue = () => {
   const movieId = addToQueueBtn.dataset.movieId;
+  const userCredentials = sessionStorage.getItem('user-credentials');
+
+  if (!userCredentials) {
+    console.error('User not authenticated');
+    return Promise.reject('User not authenticated');
+  }
   const user = auth.currentUser;
   if (!user) {
     console.error('User not authenticated');
@@ -149,26 +160,38 @@ const addToQueue = () => {
 };
 
 const updateUserInfoFromFirebase = async () => {
-  const user = auth.currentUser;
-  if (!user) {
-    console.error('User not authenticated');
-    return Promise.reject('User not authenticated');
-  }
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(async user => {
+      if (user) {
+        const userId = user.uid;
+        const userRef = ref(db, 'UserAuthList/' + userId);
 
-  const userId = user.uid;
-  const userRef = ref(db, 'UserAuthList/' + userId);
+        try {
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            const userData = {
+              MovieIDToWatched: snapshot.val().MovieIDToWatched,
+              MovieIDToQueue: snapshot.val().MovieIDToQueue,
+            };
 
-  const snapshot = await get(userRef);
-  if (snapshot.exists()) {
-    const userData = {
-      MovieIDToWatched: snapshot.val().MovieIDToWatched,
-      MovieIDToQueue: snapshot.val().MovieIDToQueue,
-    };
+            console.log('User Data:', userData);
 
-    console.log('User Data:', userData);
-
-    sessionStorage.setItem('user-info', JSON.stringify(userData));
-  }
+            sessionStorage.setItem('user-info', JSON.stringify(userInfo));
+          }
+          resolve();
+        } catch (error) {
+          console.error('Error updating user info from Firebase:', error);
+          reject(error);
+        } finally {
+          unsubscribe();
+        }
+      } else {
+        console.error('User not authenticated');
+        reject('User not authenticated');
+        unsubscribe();
+      }
+    });
+  });
 };
 
 export {

@@ -18,6 +18,7 @@ import {
   addToQueue,
   updateUserInfoFromFirebase,
 } from './userInteraction';
+
 export let moviesQueryType = 'byTrending';
 // for pagination to know which query to do
 // moviesQueryType possible values : [byTrending, byQuery, byLibraryWatched, byLibraryQueue]
@@ -57,25 +58,29 @@ async function fetchInitialData() {
 
     const trendingMoviesResponse = await GetTrendingMovies('week', initialPage);
     renderMovies(trendingMoviesResponse.data.results, 'byTrending');
-    refreshPagination(trendingMoviesResponse.data.total_pages, paginationContainer, initialPage);
-  }
-  catch (error) {
+    refreshPagination(
+      trendingMoviesResponse.data.total_pages,
+      paginationContainer,
+      initialPage
+    );
+  } catch (error) {
     console.error('Error fetching initial data:', error);
-    displayError('Search result not successful. Enter the correct movie name and');
-  }
-  finally {
+    displayError(
+      'Search result not successful. Enter the correct movie name and'
+    );
+  } finally {
     // setTimeout(() => {
     //   Notiflix.Loading.remove();
     // }, 600);
   }
-
 }
 
 fetchInitialData();
 
 function renderMovies(movies, queryType) {
   if (movies.length === 0) {
-    movieSectionTitle.textContent = 'Search result not successful. Enter the correct movie name and';
+    movieSectionTitle.textContent =
+      'Search result not successful. Enter the correct movie name and';
     movieList.innerHTML = '';
     return;
   }
@@ -86,18 +91,26 @@ function renderMovies(movies, queryType) {
 
 function handleSearchQuery(query) {
   if (query === '') {
-    displayError('Search result not successful. Enter the correct movie name and');
+    displayError(
+      'Search result not successful. Enter the correct movie name and'
+    );
     return;
   }
 
   GetMoviesByQuery(query, initialPage)
     .then(response => {
       renderMovies(response.data.results, 'byQuery');
-      refreshPagination(response.data.total_pages, paginationContainer, initialPage);
+      refreshPagination(
+        response.data.total_pages,
+        paginationContainer,
+        initialPage
+      );
     })
     .catch(error => {
       console.error('Error fetching movies by query:', error);
-      displayError('Search result not successful. Enter the correct movie name and.');
+      displayError(
+        'Search result not successful. Enter the correct movie name and.'
+      );
     });
 
   // Clear previous error messages if any
@@ -210,9 +223,7 @@ let inputEmailRegister = document.getElementById('inputEmailRegister');
 let inputPasswordRegister = document.getElementById('inputPasswordRegister');
 let inputFirstName = document.getElementById('inputFirstName');
 let inputLastName = document.getElementById('inputLastName');
-
 let RegistrationForm = document.getElementById('RegistrationForm');
-// let loginModal = document.getElementById('loginModal');
 let SignInForm = document.getElementById('SignInForm');
 
 RegistrationForm.addEventListener('submit', evt => {
@@ -251,11 +262,6 @@ SignInForm.addEventListener('submit', evt => {
 addToWatchedBtn.addEventListener('click', addToWatch);
 addToQueueBtn.addEventListener('click', addToQueue);
 
-// window.addEventListener('beforeunload', function () {
-//   sessionStorage.clear();
-//   localStorage.clear();
-// });
-
 var registerClose = document.querySelectorAll('.register-close');
 var registerOpen = document.querySelectorAll('.register-open');
 var loginOpen = document.querySelectorAll('.login-open');
@@ -263,21 +269,21 @@ var loginOpen = document.querySelectorAll('.login-open');
 var loginModal = document.getElementById('SignInForm');
 var registerModal = document.getElementById('RegistrationForm');
 
-registerOpen.forEach((btn) => {
+registerOpen.forEach(btn => {
   btn.addEventListener('click', () => {
     registerModal.style.display = 'flex';
     loginModal.style.display = 'none';
   });
 });
 
-registerClose.forEach((btn) => {
+registerClose.forEach(btn => {
   btn.addEventListener('click', () => {
     registerModal.style.display = 'none';
     authModal.style.display = 'none';
   });
 });
 
-loginOpen.forEach((btn) => {
+loginOpen.forEach(btn => {
   btn.addEventListener('click', () => {
     loginModal.style.display = 'flex';
     registerModal.style.display = 'none';
