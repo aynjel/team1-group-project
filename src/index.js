@@ -76,7 +76,7 @@ fetchInitialData();
 
 function renderMovies(movies, queryType) {
   if (movies.length === 0) {
-    movieSectionTitle.textContent = 'No movies found';
+    movieSectionTitle.textContent = 'Search result not successful. Enter the correct movie name and';
     movieList.innerHTML = '';
     return;
   }
