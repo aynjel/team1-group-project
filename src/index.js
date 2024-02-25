@@ -11,10 +11,29 @@ import {
   gSelectedPage,
 } from './pagination';
 import { getMovieDetails } from './movieModal';
-
+import {
+  RegisterUser,
+  SignInUser,
+  addToWatch,
+  addToQueue,
+  updateUserInfoFromFirebase,
+} from './userInteraction';
 export let moviesQueryType = 'byTrending';
 // for pagination to know which query to do
 // moviesQueryType possible values : [byTrending, byQuery, byLibraryWatched, byLibraryQueue]
+
+var authModal = document.getElementById('loginModal');
+var tabAuth = document.getElementById('tab-auth');
+var tabLibrary = document.getElementById('tab-library');
+
+const userData = JSON.parse(sessionStorage.getItem('user-credentials'));
+if (userData) {
+  console.log('User Info:', userData);
+  authModal.style.display = 'none';
+  tabAuth.style.display = 'none';
+  tabLibrary.style.display = 'block';
+  updateUserInfoFromFirebase();
+}
 
 export let currentMovieQuery = '';
 // for pagination to query text in search bar
@@ -100,29 +119,14 @@ searchForm.addEventListener('submit', event => {
   handleSearchQuery(currentMovieQuery);
 });
 
-// MODAL FUNCTION START
-const closeModal = document.querySelector('.modal-close-btn');
-
-const modal = document.getElementById('modal');
-movieList.addEventListener('click', event => {
-  const targetMovie = event.target.closest('.movie-details');
-  if (targetMovie) {
-    modal.classList.add('open');
-    const movieId = targetMovie.getAttribute('data-movie-id');
-    getMovieDetails(movieId);
-  }
-});
-
-closeModal.addEventListener('click', () => {
-  modal.classList.remove('open');
-});
-
 function displayError(message) {
   // Display error message on UI
   var errorMessageElement = document.createElement('p');
   errorMessageElement.textContent = message;
   errorMessageElement.style.color = 'red';
   errorMessageElement.style.display = 'block';
+  errorMessageElement.style.textAlign = 'center';
+  errorMessageElement.style.paddingTop = '22px';
 
   // Clear previous error messages if any
   var existingErrorMessage = document.querySelector('.error-message');
@@ -167,3 +171,123 @@ export function MovieCardHTML(movie) {
     </li>
   `;
 }
+
+// MODAL FUNCTION START #####################################
+const closeModal = document.querySelector('.modal-close-btn');
+const modal = document.getElementById('modal');
+const addToWatchedBtn = document.getElementById('addToWatchedBtn');
+const addToQueueBtn = document.getElementById('addToQueueBtn');
+movieList.addEventListener('click', event => {
+  const targetMovie = event.target.closest('.movie-details');
+  if (targetMovie) {
+    modal.classList.add('open');
+    console.log('click');
+    const movieId = targetMovie.getAttribute('data-movie-id');
+    console.log(movieId);
+    getMovieDetails(movieId);
+    addToWatchedBtn.setAttribute('data-movie-id', movieId);
+    addToQueueBtn.setAttribute('data-movie-id', movieId);
+  }
+});
+
+closeModal.addEventListener('click', () => {
+  modal.classList.remove('open');
+});
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') {
+    modal.classList.remove('open');
+  }
+});
+
+modal.addEventListener('click', function (event) {
+  if (!event.target.closest('.moviecard-modal-content')) {
+    modal.classList.remove('open');
+  }
+});
+// MODAL FUNCTION END #####################################
+
+// FIREBASE LOGIN AND USERINERACTION  START ###############
+let inputEmailRegister = document.getElementById('inputEmailRegister');
+let inputPasswordRegister = document.getElementById('inputPasswordRegister');
+let inputFirstName = document.getElementById('inputFirstName');
+let inputLastName = document.getElementById('inputLastName');
+
+let RegistrationForm = document.getElementById('RegistrationForm');
+// let loginModal = document.getElementById('loginModal');
+let SignInForm = document.getElementById('SignInForm');
+
+RegistrationForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  RegisterUser(
+    inputEmailRegister.value,
+    inputPasswordRegister.value,
+    inputFirstName.value,
+    inputLastName.value
+  )
+    .then(() => {
+      console.log('Registration successful');
+
+      evt.target.reset();
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+});
+
+SignInForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  SignInUser(inputEmailSignIn.value, inputPasswordSignIn.value)
+    .then(() => {
+      console.log('Sign-in successful');
+      evt.target.reset();
+      loginModal.classList.add('login-close');
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+});
+
+addToWatchedBtn.addEventListener('click', addToWatch);
+addToQueueBtn.addEventListener('click', addToQueue);
+
+// window.addEventListener('beforeunload', function () {
+//   sessionStorage.clear();
+//   localStorage.clear();
+// });
+
+var registerClose = document.querySelectorAll('.register-close');
+var registerOpen = document.querySelectorAll('.register-open');
+var loginOpen = document.querySelectorAll('.login-open');
+
+var loginModal = document.getElementById('SignInForm');
+var registerModal = document.getElementById('RegistrationForm');
+
+registerOpen.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    registerModal.style.display = 'flex';
+    loginModal.style.display = 'none';
+  });
+});
+
+registerClose.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    registerModal.style.display = 'none';
+    authModal.style.display = 'none';
+  });
+});
+
+loginOpen.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+    registerModal.style.display = 'none';
+  });
+});
+
+tabAuth.addEventListener('click', () => {
+  authModal.style.display = 'flex';
+  loginModal.style.display = 'flex';
+  registerModal.style.display = 'none';
+});
