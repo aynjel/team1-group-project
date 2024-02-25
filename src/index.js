@@ -109,7 +109,7 @@ function handleSearchQuery(query) {
     .catch(error => {
       console.error('Error fetching movies by query:', error);
       displayError(
-        'Search result not successful. Enter the correct movie name and.'
+        'Search result not successful. Enter the correct movie name and'
       );
     });
 
