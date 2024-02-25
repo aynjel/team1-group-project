@@ -41,7 +41,6 @@ export let currentMovieQuery = '';
 const initialPage = 1;
 
 var movieList = document.querySelector('.movies-list');
-var movieSectionTitle = document.querySelector('.movie-section-title');
 var genreList = [];
 var watched = []; // for watched movies
 var queue = []; // for queue movies
@@ -82,13 +81,12 @@ function renderMovies(movies, queryType) {
   }
 
   moviesQueryType = queryType;
-  movieSectionTitle.textContent = '';
   movieList.innerHTML = movies.map(MovieCardHTML).join('');
 }
 
 function handleSearchQuery(query) {
   if (query === '') {
-    displayError('Please enter a search query');
+    displayError('Search result not successful. Enter the correct movie name');
     return;
   }
 
