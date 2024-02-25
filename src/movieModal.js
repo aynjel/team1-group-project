@@ -4,7 +4,6 @@ import { IMAGE_URL, DEFAULT_IMG } from './movies-api';
 export async function getMovieDetails(movieId) {
   const { data } = await GetMovieDetails(movieId);
   updateModal(data);
-  console.log(data);
 }
 
 const modalMovieImage = document.getElementById('modalImage');

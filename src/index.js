@@ -22,66 +22,82 @@ export let currentMovieQuery = '';
 const initialPage = 1;
 
 var movieList = document.querySelector('.movies-list');
+var movieSectionTitle = document.querySelector('.movie-section-title');
 var genreList = [];
-
 var watched = []; // for watched movies
 var queue = []; // for queue movies
 
-GetMovieGenres().then(response => genreList.push(...response.data.genres));
+// Fetch genres and initial trending movies
+async function fetchInitialData() {
+  try {
+    const genreResponse = await GetMovieGenres();
+    genreList = genreResponse.data.genres;
 
-GetTrendingMovies('week', initialPage).then(response => {
-  moviesQueryType = 'byTrending';
-  var movies = '';
-  response.data.results.forEach(movie => {
-    movies += MovieCardHTML(movie);
-  });
+    // Get watched and queue movies from local storage
+    // watched = JSON.parse(localStorage.getItem('watched')) || [];
+    // queue = JSON.parse(localStorage.getItem('queue')) || [];
 
-  movieList.innerHTML = movies;
-  refreshPagination(
-    response.data.total_pages,
-    paginationContainer,
-    initialPage
-  );
-});
+    const trendingMoviesResponse = await GetTrendingMovies('week', initialPage);
+    renderMovies(trendingMoviesResponse.data.results, 'byTrending');
+    refreshPagination(trendingMoviesResponse.data.total_pages, paginationContainer, initialPage);
+  }
+  catch (error) {
+    console.error('Error fetching initial data:', error);
+    displayError('Error fetching initial data. Please try again later.');
+  }
+  finally {
+    // setTimeout(() => {
+    //   Notiflix.Loading.remove();
+    // }, 600);
+  }
 
-GetMovieDetails(365620).then(response => {
-  // console.log(response.data);
-});
+}
 
-var searchForm = document.querySelector('.search-form');
-var searchQuery = document.querySelector('#searchQuery');
-var errorMessage = document.querySelector('.error-message');
+fetchInitialData();
 
-searchForm.addEventListener('submit', event => {
-  event.preventDefault();
-  console.log('searching');
-  var query = searchQuery.value.trim();
-  if (query === '') {
-    displayError('Search result not successful. Enter the correct movie name and');
+function renderMovies(movies, queryType) {
+  if (movies.length === 0) {
+    movieSectionTitle.textContent = 'No movies found';
+    movieList.innerHTML = '';
     return;
   }
 
-  currentMovieQuery = query;
+  moviesQueryType = queryType;
+  movieSectionTitle.textContent = '';
+  movieList.innerHTML = movies.map(MovieCardHTML).join('');
+}
 
-  GetMoviesByQuery(query, initialPage).then(response => {
-    moviesQueryType = 'byQuery';
-    if (response.data.results.length === 0) {
-      displayError('Search result not successful. Enter the correct movie name and');
-      return;
-    }
+function handleSearchQuery(query) {
+  if (query === '') {
+    displayError('Please enter a search query');
+    return;
+  }
 
-    var movies = '';
-    response.data.results.forEach(movie => {
-      movies += MovieCardHTML(movie);
+  GetMoviesByQuery(query, initialPage)
+    .then(response => {
+      renderMovies(response.data.results, 'byQuery');
+      refreshPagination(response.data.total_pages, paginationContainer, initialPage);
+    })
+    .catch(error => {
+      console.error('Error fetching movies by query:', error);
+      displayError('Error fetching movies. Please try again later.');
     });
 
-    movieList.innerHTML = movies;
-    refreshPagination(
-      response.data.total_pages,
-      paginationContainer,
-      initialPage
-    );
-  });
+  // Clear previous error messages if any
+  var existingErrorMessage = document.querySelector('.error-message');
+  if (existingErrorMessage) {
+    existingErrorMessage.remove();
+  }
+}
+
+var searchForm = document.querySelector('.search-form');
+var searchQuery = document.querySelector('#searchQuery');
+
+searchForm.addEventListener('submit', event => {
+  event.preventDefault();
+  currentMovieQuery = searchQuery.value;
+  // console.log(currentMovieQuery);
+  handleSearchQuery(currentMovieQuery);
 });
 
 // MODAL FUNCTION START
