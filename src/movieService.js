@@ -10,23 +10,22 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
+  config => {
     Notiflix.Loading.pulse();
     return config;
   },
-  (error) => {
+  error => {
     Notiflix.Loading.failure();
     return Promise.reject(error);
   }
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
+  response => {
     Notiflix.Loading.remove();
     return response;
   },
-  (error) => {
-    Notiflix.Loading.failure();
+  error => {
     return Promise.reject(error);
   }
 );

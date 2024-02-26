@@ -4,6 +4,7 @@ import {
   GetMoviesByQuery,
   GetTrendingMovies,
   GetMovieDetails,
+  GetMovieByIds,
 } from './movieController';
 import {
   refreshPagination,
@@ -25,7 +26,13 @@ export let moviesQueryType = 'byTrending';
 
 var authModal = document.getElementById('loginModal');
 var tabAuth = document.getElementById('tab-auth');
+var tabHome = document.getElementById('tab-home');
 var tabLibrary = document.getElementById('tab-library');
+
+var formSearch = document.querySelector('.form-search');
+var library = document.querySelector('.library');
+
+var tabLinks = document.querySelectorAll('.tab-links');
 
 const userData = JSON.parse(sessionStorage.getItem('user-credentials'));
 if (userData) {
@@ -35,6 +42,8 @@ if (userData) {
   tabLibrary.style.display = 'block';
   updateUserInfoFromFirebase();
 }
+
+const userDataLibrary = JSON.parse(sessionStorage.getItem('user-info'));
 
 export let currentMovieQuery = '';
 // for pagination to query text in search bar
@@ -52,12 +61,14 @@ async function fetchInitialData() {
     const genreResponse = await GetMovieGenres();
     genreList = genreResponse.data.genres;
 
-    // Get watched and queue movies from local storage
-    // watched = JSON.parse(localStorage.getItem('watched')) || [];
-    // queue = JSON.parse(localStorage.getItem('queue')) || [];
+    // Get watched and queue movies from session storage
+    if (userDataLibrary) {
+      watched = userDataLibrary.MovieIDToWatched || [];
+      queue = userDataLibrary.MovieIDToQueue || [];
+    }
 
     const trendingMoviesResponse = await GetTrendingMovies('week', initialPage);
-    renderMovies(trendingMoviesResponse.data.results, 'byTrending');
+    renderMovies(trendingMoviesResponse.data.results);
     refreshPagination(
       trendingMoviesResponse.data.total_pages,
       paginationContainer,
@@ -77,7 +88,36 @@ async function fetchInitialData() {
 
 fetchInitialData();
 
-function renderMovies(movies, queryType) {
+var watchedMoviesList = document.querySelector('#watched-movies');
+var queueMoviesList = document.querySelector('#queue-movies');
+
+tabLibrary.addEventListener('click', () => {
+  tabLibrary.classList.remove('hide');
+  // toggle active class for tabLinks
+  tabLinks.forEach(tabLink => {
+    tabLink.classList.remove('active');
+  });
+  tabLibrary.classList.add('active');
+  formSearch.classList.remove('active');
+  library.classList.add('active');
+  movieList.classList.add('hide');
+  watchedMoviesList.classList.remove('hide');
+});
+
+tabHome.addEventListener('click', () => {
+  tabHome.classList.remove('hide');
+  // toggle active class for tabLinks
+  tabLinks.forEach(tabLink => {
+    tabLink.classList.remove('active');
+  });
+  tabHome.classList.add('active');
+  formSearch.classList.add('active');
+  library.classList.remove('active');
+  movieList.classList.remove('hide');
+  watchedMoviesList.classList.add('hide');
+});
+
+function renderMovies(movies, queryType = 'byTrending') {
   if (movies.length === 0) {
     movieSectionTitle.textContent =
       'Search result not successful. Enter the correct movie name and';

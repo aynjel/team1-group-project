@@ -15,3 +15,7 @@ export function GetMoviesByQuery(query, page) {
 export function GetMovieDetails(movieId) {
   return axiosInstance.get(`/movie/${movieId}`);
 }
+
+export function GetMovieByIds(ids) {
+  return axiosInstance.get(`/find/${ids}`);
+}
