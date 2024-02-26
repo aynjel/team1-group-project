@@ -1,4 +1,6 @@
-#movie-card {
+.trending-movies,
+#watched-movies,
+#queue-movies {
   max-width: 1024px;
   margin: 40px auto;
   padding: 0 20px;
@@ -12,7 +14,9 @@
   text-align: center;
 }
 
-.movies-list {
+.movies-list,
+.watched-movies-list,
+.queue-movies-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 0.4fr));
   justify-content: center;

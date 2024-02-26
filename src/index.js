@@ -79,15 +79,12 @@ async function fetchInitialData() {
     displayError(
       'Search result not successful. Enter the correct movie name and'
     );
-  } finally {
-    // setTimeout(() => {
-    //   Notiflix.Loading.remove();
-    // }, 600);
   }
 }
 
 fetchInitialData();
 
+var trendingMoviesList = document.querySelector('.trending-movies');
 var watchedMoviesList = document.querySelector('#watched-movies');
 var queueMoviesList = document.querySelector('#queue-movies');
 
@@ -100,8 +97,9 @@ tabLibrary.addEventListener('click', () => {
   tabLibrary.classList.add('active');
   formSearch.classList.remove('active');
   library.classList.add('active');
-  movieList.classList.add('hide');
+
   watchedMoviesList.classList.remove('hide');
+  trendingMoviesList.classList.add('hide');
 });
 
 tabHome.addEventListener('click', () => {
@@ -113,8 +111,9 @@ tabHome.addEventListener('click', () => {
   tabHome.classList.add('active');
   formSearch.classList.add('active');
   library.classList.remove('active');
-  movieList.classList.remove('hide');
+
   watchedMoviesList.classList.add('hide');
+  trendingMoviesList.classList.remove('hide');
 });
 
 function renderMovies(movies, queryType = 'byTrending') {
