@@ -181,6 +181,11 @@ tbody td:nth-child(1) {
     cursor: pointer;
     font-size: 12px;
     text-align: center;
+    &:hover {
+            background-color: #fff;
+            color: black;
+            border: 1px solid;
+        }
    
 
     @media screen and(min-width:768px) {
@@ -204,6 +209,10 @@ tbody td:nth-child(1) {
     cursor: pointer;
     font-size: 12px;
     text-align: center;
+    &:hover {
+            background-color: #ff6b08;
+            color: #fff;
+        }
 
 
     @media screen and(min-width:768px) {
