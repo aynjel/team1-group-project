@@ -192,9 +192,7 @@ movieList.addEventListener('click', event => {
   const targetMovie = event.target.closest('.movie-details');
   if (targetMovie) {
     modal.classList.add('open');
-    console.log('click');
     const movieId = targetMovie.getAttribute('data-movie-id');
-    console.log(movieId);
     getMovieDetails(movieId);
     addToWatchedBtn.setAttribute('data-movie-id', movieId);
     addToQueueBtn.setAttribute('data-movie-id', movieId);

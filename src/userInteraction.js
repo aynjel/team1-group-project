@@ -176,7 +176,7 @@ const updateUserInfoFromFirebase = async () => {
 
             console.log('User Data:', userData);
 
-            sessionStorage.setItem('user-info', JSON.stringify(userInfo));
+            sessionStorage.setItem('user-info', JSON.stringify(userData));
           }
           resolve();
         } catch (error) {
